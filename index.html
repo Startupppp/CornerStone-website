@@ -1,0 +1,1323 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Cornerstone Hyderabad</title>
+<meta name="description" content="Construction materials from our own dark stores in 60–120 minutes, and verified labour to the same site. Launching across four Hyderabad zones." />
+<meta name="theme-color" content="#06080D" />
+<meta property="og:title" content="Cornerstone Hyderabad" />
+<meta property="og:description" content="Materials in 60–120 minutes. Labour on the same site. Launching in Hyderabad." />
+<meta property="og:type" content="website" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2306080D'/%3E%3Cpath d='M16 5 27 11.5v13L16 31 5 24.5v-13z' fill='none' stroke='%23FFB000' stroke-width='2'/%3E%3C/svg%3E" />
+<style>
+/* ─────────────────────────────────────────────────────────────
+   CORNERSTONE — night site sheet
+   A deliberately single-theme page: the whole design is a dark
+   drawing sheet lit by a WebGL model. Every colour is painted
+   explicitly so it holds on any host ground.
+   ───────────────────────────────────────────────────────────── */
+:root{
+  --ground:#06080D;
+  --slab:#10141C;
+  --slab-2:#171C26;
+  --chalk:#E9E6DE;
+  --dust:#8B93A3;
+  --dust-dim:#5B6473;
+  --safety:#FFB000;
+  --safety-deep:#B47100;
+  --oxide:#C2410C;
+  --blueprint:#3E5C86;
+  --hair:rgba(233,230,222,.10);
+  --hair-strong:rgba(233,230,222,.20);
+
+  --ship:#2ED3A0;
+  --wip:#FFB000;
+  --none:#6B7280;
+
+  --display:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+
+  --pad:clamp(20px,5vw,72px);
+  --col:min(720px,100%);
+}
+
+*,*::before,*::after{box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto;}}
+
+body{
+  margin:0;
+  background:var(--ground);
+  color:var(--chalk);
+  font-family:var(--display);
+  font-size:17px;
+  line-height:1.6;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+::selection{background:rgba(255,176,0,.30);color:#fff;}
+
+/* ── the model layer ───────────────────────────────────────── */
+#world{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(120% 80% at 50% 108%, rgba(255,176,0,.13) 0%, transparent 58%),
+    radial-gradient(90% 60% at 82% -8%, rgba(62,92,134,.16) 0%, transparent 60%),
+    var(--ground);
+}
+#gl{width:100%;height:100%;display:block;}
+/* readability scrim: the sheet stays dark under the text, clear where the model lives */
+#vignette{
+  position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:
+    linear-gradient(96deg, rgba(6,8,13,.94) 0%, rgba(6,8,13,.86) 30%, rgba(6,8,13,.30) 56%, rgba(6,8,13,0) 74%),
+    radial-gradient(115% 80% at 62% 45%, transparent 38%, rgba(6,8,13,.70) 100%);
+}
+@media (max-width:1000px){
+  #vignette{
+    background:
+      linear-gradient(180deg, rgba(6,8,13,.86) 0%, rgba(6,8,13,.74) 45%, rgba(6,8,13,.86) 100%),
+      radial-gradient(115% 80% at 50% 45%, transparent 45%, rgba(6,8,13,.60) 100%);
+  }
+}
+/* scanline tooth — a drafting-film texture, very low contrast */
+#grain{
+  position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.35;
+  background-image:repeating-linear-gradient(to bottom,rgba(233,230,222,.028) 0 1px,transparent 1px 3px);
+}
+
+/* ── shell ─────────────────────────────────────────────────── */
+.shell{position:relative;z-index:2;}
+.sheet{
+  padding-inline:var(--pad);
+  max-width:1320px;
+  margin-inline:auto;
+}
+/* reserve the right gutter for the HUD rail so nothing sits under it */
+@media (min-width:1180px){ .sheet{padding-right:228px;} }
+.col{width:var(--col);}
+
+/* ── masthead ──────────────────────────────────────────────── */
+header.mast{
+  position:fixed;top:0;left:0;right:0;z-index:5;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:16px var(--pad);
+  border-bottom:1px solid transparent;
+  transition:background .35s ease,border-color .35s ease,backdrop-filter .35s ease;
+}
+header.mast[data-stuck="1"]{
+  background:rgba(6,8,13,.78);
+  backdrop-filter:blur(14px) saturate(120%);
+  -webkit-backdrop-filter:blur(14px) saturate(120%);
+  border-bottom-color:var(--hair);
+}
+.wordmark{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--chalk);}
+.wordmark svg{display:block;width:22px;height:22px;flex:none;}
+.wordmark b{
+  font:700 15px/1 var(--display);
+  letter-spacing:.16em;text-transform:uppercase;
+}
+.mast nav{display:flex;align-items:center;gap:26px;}
+/* :not(.pill) keeps this from overriding the button's own colour — it outranks .pill */
+.mast nav a:not(.pill){
+  font:500 11px/1 var(--mono);
+  letter-spacing:.2em;text-transform:uppercase;
+  color:var(--dust);text-decoration:none;
+  padding:6px 0;border-bottom:1px solid transparent;
+  transition:color .2s ease,border-color .2s ease;
+}
+.mast nav a:not(.pill):hover{color:var(--chalk);border-bottom-color:var(--safety);}
+@media (max-width:860px){.mast nav a:not(.pill){display:none;}}
+
+/* ── buttons ───────────────────────────────────────────────── */
+.pill{
+  --pill-fg:var(--ground);
+  display:inline-flex;align-items:center;gap:10px;
+  padding:13px 20px;
+  font:600 12px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;
+  color:var(--pill-fg);background:var(--safety);
+  text-decoration:none;border:1px solid var(--safety);
+  transition:transform .18s ease,box-shadow .25s ease,background .2s ease;
+  box-shadow:0 0 0 rgba(255,176,0,0);
+}
+.pill:hover{transform:translateY(-2px);box-shadow:0 10px 34px -12px rgba(255,176,0,.75);background:#FFC33D;}
+.pill.ghost{
+  color:var(--chalk);background:transparent;border-color:var(--hair-strong);
+  box-shadow:none;
+}
+.pill.ghost:hover{border-color:var(--safety);color:var(--safety);background:rgba(255,176,0,.06);}
+.pill .tick{width:6px;height:6px;background:currentColor;flex:none;}
+header .pill{padding:10px 16px;}
+
+:where(a,button,input,summary):focus-visible{
+  outline:2px solid var(--safety);outline-offset:3px;border-radius:1px;
+}
+
+/* ── HUD rail — reads real scroll state ────────────────────── */
+#hud{
+  position:fixed;z-index:4;right:calc(var(--pad) - 4px);top:50%;transform:translateY(-50%);
+  width:172px;display:none;
+  font:500 10px/1.5 var(--mono);letter-spacing:.14em;text-transform:uppercase;
+  color:var(--dust-dim);
+  border-left:1px solid var(--hair);padding:14px 10px 16px 14px;
+  background:linear-gradient(90deg, rgba(6,8,13,.88), rgba(6,8,13,.55));
+  backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);
+}
+@media (min-width:1180px){#hud{display:block;}}
+#hud dl{margin:0;display:grid;grid-template-columns:1fr;gap:14px;}
+#hud dt{color:var(--dust-dim);}
+#hud dd{margin:2px 0 0;color:var(--chalk);font-variant-numeric:tabular-nums;letter-spacing:.1em;}
+#hud dd.hot{color:var(--safety);}
+#hud .bar{margin-top:18px;height:112px;width:2px;background:var(--hair);position:relative;}
+#hud .bar i{position:absolute;left:0;top:0;width:2px;background:var(--safety);height:0;transition:height .18s linear;}
+
+/* ── section furniture ─────────────────────────────────────── */
+section{position:relative;padding-block:clamp(88px,13vh,150px);scroll-margin-top:76px;}
+section + section{border-top:1px solid var(--hair);}
+.eyebrow{
+  display:flex;align-items:center;gap:10px;
+  font:600 11px/1 var(--mono);letter-spacing:.24em;text-transform:uppercase;
+  color:var(--safety);margin:0 0 22px;
+}
+.eyebrow::before{content:"";width:22px;height:1px;background:var(--safety);flex:none;}
+.eyebrow span.dim{color:var(--dust-dim);letter-spacing:.18em;}
+
+h2{
+  font:800 clamp(30px,4.6vw,50px)/1.06 var(--display);
+  letter-spacing:-.035em;margin:0 0 20px;text-wrap:balance;
+}
+h3{font:700 18px/1.3 var(--display);letter-spacing:-.015em;margin:0 0 8px;}
+p{margin:0 0 18px;color:var(--dust);max-width:66ch;}
+p strong{color:var(--chalk);font-weight:600;}
+p.lead{font-size:clamp(17px,2vw,20px);color:#B9C0CD;line-height:1.62;}
+
+/* ── hero ──────────────────────────────────────────────────── */
+#top{
+  min-height:100svh;display:flex;flex-direction:column;justify-content:center;
+  padding-top:104px;padding-bottom:56px;
+}
+.status-line{
+  display:inline-flex;align-items:center;gap:12px;
+  font:600 11px/1 var(--mono);letter-spacing:.22em;text-transform:uppercase;
+  color:var(--dust);border:1px solid var(--hair);padding:9px 14px;margin-bottom:28px;
+  background:rgba(16,20,28,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+}
+.beacon{width:7px;height:7px;background:var(--safety);flex:none;position:relative;}
+.beacon::after{
+  content:"";position:absolute;inset:-4px;border:1px solid var(--safety);opacity:.45;
+  animation:ping 2.4s ease-out infinite;
+}
+@keyframes ping{0%{transform:scale(.6);opacity:.7}70%,100%{transform:scale(1.5);opacity:0}}
+
+h1{
+  font:800 clamp(44px,9.4vw,106px)/.92 var(--display);
+  letter-spacing:-.05em;text-transform:uppercase;
+  margin:0 0 24px;max-width:12ch;
+}
+h1 .ln{display:block;overflow:hidden;padding-bottom:.02em;}
+h1 .ln > span{display:block;transform:translateY(102%);animation:raise .95s cubic-bezier(.16,.84,.24,1) forwards;}
+h1 .ln:nth-child(1) > span{animation-delay:.10s;}
+h1 .ln:nth-child(2) > span{animation-delay:.20s;}
+h1 .ln:nth-child(3) > span{animation-delay:.30s;}
+@keyframes raise{to{transform:none;}}
+h1 em{font-style:normal;color:var(--safety);}
+@media (prefers-reduced-motion:reduce){
+  h1 .ln > span{transform:none;animation:none;}
+}
+.hero-sub{max-width:56ch;font-size:clamp(16px,2vw,19px);color:#B9C0CD;}
+.hero-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px;}
+
+.ticker{
+  margin-top:44px;display:flex;flex-wrap:wrap;gap:0;
+  border-top:1px solid var(--hair);border-left:1px solid var(--hair);
+  max-width:900px;
+}
+.ticker div{
+  flex:1 1 150px;padding:14px 16px;
+  border-right:1px solid var(--hair);border-bottom:1px solid var(--hair);
+  background:rgba(16,20,28,.42);
+}
+.ticker .k{
+  display:block;
+  font:600 10px/1.4 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--dust-dim);
+}
+.ticker .v{
+  display:block;
+  margin-top:7px;font:700 15px/1.2 var(--display);letter-spacing:-.01em;color:var(--chalk);
+  font-variant-numeric:tabular-nums;
+}
+.ticker .v.hot{color:var(--safety);}
+
+/* ── card primitives (sharp, ticked corners — a drawing, not a UI kit) ── */
+.card{
+  position:relative;background:rgba(16,20,28,.62);
+  border:1px solid var(--hair);padding:24px;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  transition:border-color .25s ease,transform .25s ease,background .25s ease;
+}
+.card::before,.card::after{
+  content:"";position:absolute;width:9px;height:9px;pointer-events:none;
+  border-color:var(--safety);opacity:0;transition:opacity .25s ease;
+}
+.card::before{top:-1px;left:-1px;border-top:1px solid;border-left:1px solid;}
+.card::after{bottom:-1px;right:-1px;border-bottom:1px solid;border-right:1px solid;}
+.card:hover{border-color:var(--hair-strong);transform:translateY(-3px);background:rgba(23,28,38,.72);}
+.card:hover::before,.card:hover::after{opacity:1;}
+.card .tag{
+  font:600 10px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;
+  color:var(--dust-dim);display:block;margin-bottom:14px;
+}
+.card p{margin:0;font-size:15px;line-height:1.58;}
+
+/* ── build grid (bento) ────────────────────────────────────── */
+.bento{
+  display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-top:44px;
+}
+.bento .card{grid-column:span 2;}
+.bento .card.wide{grid-column:span 3;}
+.bento .card.full{grid-column:span 6;}
+@media (max-width:1000px){
+  .bento{grid-template-columns:repeat(4,1fr);}
+  .bento .card,.bento .card.wide{grid-column:span 2;}
+  .bento .card.full{grid-column:span 4;}
+}
+@media (max-width:640px){
+  .bento{grid-template-columns:1fr;}
+  .bento .card,.bento .card.wide,.bento .card.full{grid-column:span 1;}
+}
+.card .ico{width:26px;height:26px;display:block;margin-bottom:16px;color:var(--safety);}
+.card .ico svg{width:100%;height:100%;display:block;}
+
+/* ── roles ─────────────────────────────────────────────────── */
+.roles{margin-top:44px;border-top:1px solid var(--hair);}
+.role{
+  display:grid;grid-template-columns:44px 210px 1fr;gap:22px;align-items:baseline;
+  padding:22px 4px;border-bottom:1px solid var(--hair);
+  transition:background .25s ease,padding-left .25s ease;
+}
+.role:hover{background:rgba(16,20,28,.6);padding-left:14px;}
+.role .n{font:600 11px/1.4 var(--mono);color:var(--dust-dim);letter-spacing:.14em;}
+.role .who{font:700 17px/1.3 var(--display);letter-spacing:-.015em;color:var(--chalk);}
+.role .who i{
+  display:inline-block;width:7px;height:7px;margin-right:9px;font-style:normal;
+  vertical-align:middle;background:var(--role,var(--safety));
+}
+.role .what{font-size:15px;color:var(--dust);line-height:1.55;}
+@media (max-width:760px){
+  .role{grid-template-columns:1fr;gap:6px;}
+  .role .n{letter-spacing:.2em;}
+}
+
+/* ── flow (a real sequence — numbers earn their place) ─────── */
+.flow{margin-top:44px;display:grid;gap:0;border-left:1px solid var(--hair);}
+.step{
+  position:relative;padding:0 0 34px 34px;
+}
+.step:last-child{padding-bottom:0;}
+.step::before{
+  content:"";position:absolute;left:-5px;top:6px;width:9px;height:9px;
+  background:var(--ground);border:1px solid var(--safety);
+}
+.step .no{
+  font:600 10px/1 var(--mono);letter-spacing:.24em;color:var(--safety);
+  display:block;margin-bottom:8px;
+}
+.step h3{margin-bottom:6px;}
+.step p{font-size:15px;margin:0;}
+.step .meta{
+  display:inline-block;margin-top:10px;font:500 11px/1 var(--mono);
+  letter-spacing:.14em;text-transform:uppercase;color:var(--dust-dim);
+  border:1px solid var(--hair);padding:6px 9px;
+}
+
+/* ── zones ─────────────────────────────────────────────────── */
+.zones{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:44px;}
+@media (max-width:900px){.zones{grid-template-columns:repeat(2,1fr);}}
+@media (max-width:520px){.zones{grid-template-columns:1fr;}}
+.zone{position:relative;padding:22px;border:1px solid var(--hair);background:rgba(16,20,28,.6);}
+.zone .pin{
+  font:600 11px/1 var(--mono);letter-spacing:.2em;color:var(--safety);
+  font-variant-numeric:tabular-nums;
+}
+.zone h3{margin:12px 0 6px;font-size:17px;}
+.zone .store{font:500 11px/1.5 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--dust-dim);}
+.zone .sla{margin-top:16px;padding-top:14px;border-top:1px dashed var(--hair);font-size:14px;color:var(--dust);}
+
+/* ── fee table ─────────────────────────────────────────────── */
+.tablewrap{overflow-x:auto;margin-top:32px;border:1px solid var(--hair);}
+table{border-collapse:collapse;width:100%;min-width:460px;font-variant-numeric:tabular-nums;}
+th,td{text-align:left;padding:14px 18px;border-bottom:1px solid var(--hair);}
+th{
+  font:600 10px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--dust-dim);
+  background:rgba(16,20,28,.7);
+}
+td{font-size:15px;color:var(--chalk);}
+td.amt{font-family:var(--mono);letter-spacing:.04em;color:var(--safety);font-size:14px;}
+tr:last-child td{border-bottom:0;}
+
+/* ── honesty board ─────────────────────────────────────────── */
+.board{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:44px;}
+@media (max-width:820px){.board{grid-template-columns:1fr;}}
+.panel{border:1px solid var(--hair);background:rgba(16,20,28,.62);padding:26px;}
+.panel > h3{
+  font:600 11px/1 var(--mono);letter-spacing:.22em;text-transform:uppercase;
+  margin:0 0 20px;display:flex;align-items:center;gap:10px;
+}
+.panel.yes > h3{color:var(--ship);}
+.panel.no > h3{color:var(--dust-dim);}
+.panel ul{list-style:none;margin:0;padding:0;display:grid;gap:14px;}
+.panel li{
+  display:grid;grid-template-columns:16px 1fr;gap:12px;align-items:start;
+  font-size:15px;line-height:1.5;color:var(--dust);
+}
+.panel li b{color:var(--chalk);font-weight:600;}
+.panel li .mk{margin-top:6px;width:9px;height:9px;flex:none;}
+.panel.yes li .mk{background:var(--ship);}
+.panel.no li .mk{background:transparent;border:1px solid var(--dust-dim);}
+
+/* ── closing ───────────────────────────────────────────────── */
+#cta{text-align:left;}
+#cta h2{max-width:16ch;}
+.note{
+  font:500 12px/1.6 var(--mono);letter-spacing:.08em;color:var(--dust-dim);
+  max-width:60ch;margin-top:26px;
+}
+footer{
+  position:relative;z-index:2;border-top:1px solid var(--hair);
+  padding:34px var(--pad);max-width:1320px;margin-inline:auto;
+  display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:center;
+  font:500 11px/1.6 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--dust-dim);
+}
+footer .rule{display:flex;gap:18px;flex-wrap:wrap;}
+
+/* ── reveal ────────────────────────────────────────────────── */
+.rv{opacity:0;transform:translateY(22px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1);}
+.rv.in{opacity:1;transform:none;}
+@media (prefers-reduced-motion:reduce){
+  .rv{opacity:1;transform:none;transition:none;}
+  .beacon::after{animation:none;}
+  .pill:hover,.card:hover,.role:hover{transform:none;}
+}
+
+/* no-webgl fallback keeps the sheet lit */
+body[data-gl="off"] #world{
+  background:
+    radial-gradient(120% 80% at 50% 108%, rgba(255,176,0,.16) 0%, transparent 55%),
+    radial-gradient(90% 70% at 78% -6%, rgba(62,92,134,.20) 0%, transparent 60%),
+    linear-gradient(180deg,#080B12 0%,#06080D 100%);
+}
+body[data-gl="off"] #world::after{
+  content:"";position:absolute;inset:0;opacity:.5;
+  background-image:
+    linear-gradient(rgba(62,92,134,.16) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(62,92,134,.16) 1px,transparent 1px);
+  background-size:64px 64px;
+  mask-image:radial-gradient(70% 55% at 50% 78%,#000 0%,transparent 78%);
+  -webkit-mask-image:radial-gradient(70% 55% at 50% 78%,#000 0%,transparent 78%);
+}
+</style>
+</head>
+<body>
+
+<div id="world"><canvas id="gl" aria-hidden="true"></canvas></div>
+<div id="grain" aria-hidden="true"></div>
+<div id="vignette" aria-hidden="true"></div>
+
+<header class="mast" id="mast">
+  <a class="wordmark" href="#top">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 4 28 11v14L16 32 4 25V11z" fill="none" stroke="#FFB000" stroke-width="2"/><path d="M16 4v28M4 11l24 14M28 11 4 25" stroke="rgba(233,230,222,.22)" stroke-width="1"/></svg>
+    <b>Cornerstone</b>
+  </a>
+  <nav>
+    <a href="#build">Build</a>
+    <a href="#roles">Roles</a>
+    <a href="#flow">Order flow</a>
+    <a href="#zones">Zones</a>
+    <a href="#honest">Straight answers</a>
+    <a class="pill" href="#cta"><span class="tick"></span>Early access</a>
+  </nav>
+</header>
+
+<aside id="hud" aria-hidden="true">
+  <dl>
+    <div><dt>Sheet</dt><dd id="hud-sheet">A-01</dd></div>
+    <div><dt>Model</dt><dd class="hot" id="hud-model">Cornerstone</dd></div>
+    <div><dt>City</dt><dd>Hyderabad · IST</dd></div>
+    <div><dt>Progress</dt><dd id="hud-pct">00%</dd></div>
+  </dl>
+  <div class="bar"><i id="hud-bar"></i></div>
+</aside>
+
+<div class="shell">
+<main class="sheet">
+
+  <!-- ── HERO ─────────────────────────────────────────────── -->
+  <section id="top" data-shape="0" data-sheet="A-01" data-model="Cornerstone">
+    <div class="col">
+      <div class="status-line rv"><span class="beacon"></span>Hyderabad · Coming soon</div>
+      <h1>
+        <span class="ln"><span>Build</span></span>
+        <span class="ln"><span>without</span></span>
+        <span class="ln"><span><em>waiting</em>.</span></span>
+      </h1>
+      <p class="hero-sub rv">
+        Cement, steel, sand and fittings from <strong>our own dark stores</strong> in
+        <strong>60&ndash;120 minutes</strong>. Verified masons, electricians and painters booked to the
+        same site, on the same day. One app for the whole build — and one honest record of every rupee.
+      </p>
+      <div class="hero-cta rv">
+        <a class="pill" href="#cta"><span class="tick"></span>Get early access</a>
+        <a class="pill ghost" href="#build">See what we're building</a>
+      </div>
+
+      <div class="ticker rv">
+        <div><span class="k">Delivery window</span><span class="v hot">60–120 min</span></div>
+        <div><span class="k">Open</span><span class="v">08:00–20:00 IST</span></div>
+        <div><span class="k">Live zones at launch</span><span class="v">4</span></div>
+        <div><span class="k">Returns</span><span class="v">24 hours</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PROBLEM ──────────────────────────────────────────── -->
+  <section id="problem" data-shape="1" data-sheet="A-02" data-model="Structure">
+    <div class="col">
+      <p class="eyebrow">The problem <span class="dim">/ why this exists</span></p>
+      <h2>A build in Hyderabad still runs on phone calls.</h2>
+      <p class="lead">
+        The cement arrives a day late. The mason who confirmed on Tuesday sends someone else on
+        Wednesday. Nobody agrees on what was delivered, what was paid, or who was on site — because
+        none of it was ever written down.
+      </p>
+      <p>
+        Every part of that is a coordination problem, and coordination problems are software.
+        Cornerstone puts the catalogue, the crew, the delivery and the money record in one place,
+        so the site owner can answer <strong>what arrived, who worked, what it cost</strong> without
+        making a single call.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── BUILD ────────────────────────────────────────────── -->
+  <section id="build" data-shape="2" data-sheet="A-03" data-model="Dark store">
+    <div class="col">
+      <p class="eyebrow">What we're building <span class="dim">/ the product</span></p>
+      <h2>Two things nobody has put in one app.</h2>
+      <p class="lead">
+        Materials quick-commerce that actually understands construction units and heavy loads —
+        and the labour, attendance and project tooling that a materials app has no idea about.
+      </p>
+    </div>
+
+    <div class="bento">
+      <article class="card wide">
+        <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-5 9 5v11H3z"/><path d="M3 12h18M8 12v8M16 12v8"/></svg></span>
+        <span class="tag">Dark stores</span>
+        <h3>We own the stock</h3>
+        <p>No shopkeeper roulette. Branded cement, TMT steel, sand, blocks, plumbing and electrical sit in our own stores, one per zone — so the price you see is the price that ships.</p>
+      </article>
+
+      <article class="card wide">
+        <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></span>
+        <span class="tag">SLA clock</span>
+        <h3>60–120 minutes, on a timer</h3>
+        <p>Every order carries a promised window from the moment it is placed. The clock is visible to you, to the store picking it and to the ops desk watching for it to slip.</p>
+      </article>
+
+      <article class="card">
+        <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 20v-2a4 4 0 014-4h1"/><circle cx="9" cy="8" r="3"/><path d="M15 20v-3l2-5h3l-1 8z"/></svg></span>
+        <span class="tag">Labour</span>
+        <h3>Crew on demand</h3>
+        <p>Masons, electricians, plumbers, painters and helpers — booked by day or by gang, tracked from request to completion.</p>
+      </article>
+
+      <article class="card">
+        <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s7-5.6 7-11a7 7 0 10-14 0c0 5.4 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
+        <span class="tag">Attendance</span>
+        <h3>Geofenced check-in</h3>
+        <p>Workers check in at the site boundary, not from a tea stall two kilometres away. Hours become a record, not an argument.</p>
+      </article>
+
+      <article class="card">
+        <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5h16v15H4z"/><path d="M4 9h16M9 9v11"/></svg></span>
+        <span class="tag">Projects</span>
+        <h3>Sites, not just carts</h3>
+        <p>Group orders, bookings, photos and diary entries under a site. Six months later you can still see what happened in week three.</p>
+      </article>
+
+      <article class="card">
+        <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 16V9h11v7"/><path d="M13 11h4l4 3v2h-8z"/><circle cx="6" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg></span>
+        <span class="tag">Fleet</span>
+        <h3>Our riders, our route</h3>
+        <p>Dispatch from the nearest in-zone store, with the rider's last reported location on the order — and heavy-item rules that stop a 50 kg bag going out on a two-wheeler.</p>
+      </article>
+
+      <article class="card">
+        <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 4h18v16H3z"/><path d="M7 9h10M7 13h10M7 17h6"/></svg></span>
+        <span class="tag">Warehouse OS</span>
+        <h3>Pick, pack, count</h3>
+        <p>Pick lists off the order lines, stock movements on every write, cycle counts that refuse to close if stock would go negative.</p>
+      </article>
+
+      <article class="card">
+        <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6h16v12H4z"/><path d="M4 10h16"/><path d="M8 14h4"/></svg></span>
+        <span class="tag">Money</span>
+        <h3>A ledger, not a number</h3>
+        <p>Balances move as double-entry rows in one transaction, or they don't move at all. Every amount on your screen can be traced to the line that created it.</p>
+      </article>
+
+      <article class="card">
+        <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3l9 4.5v9L12 21l-9-4.5v-9z"/><path d="M12 12l9-4.5M12 12v9M12 12L3 7.5"/></svg></span>
+        <span class="tag">Estimator</span>
+        <h3>Slab to shopping list</h3>
+        <p>Enter the area and the mix; get quantities in the units the trade actually uses — bags, tonnes, cubic metres, pieces — priced against live catalogue rates.</p>
+      </article>
+
+      <article class="card full">
+        <span class="tag">Also in the build</span>
+        <h3>The parts that only matter when something goes wrong</h3>
+        <p>
+          24-hour returns and exchanges · cancel free within 10 minutes · short-pick resolution you can
+          see · replacement when a worker no-shows · site diary with photos · SOS from the site ·
+          B2B credit records for contractors · ops and exec dashboards that flag late against promised ·
+          Hindi, Telugu and English throughout.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ── ROLES ────────────────────────────────────────────── -->
+  <section id="roles" data-shape="5" data-sheet="A-04" data-model="Crew">
+    <div class="col">
+      <p class="eyebrow">Who it's for <span class="dim">/ six roles, one app</span></p>
+      <h2>Everyone on the build gets their own screen.</h2>
+      <p class="lead">Same login, same phone number. What you see is decided by the job you do.</p>
+    </div>
+
+    <div class="roles">
+      <div class="role"><span class="n">01</span><span class="who" style="--role:#3B82F6"><i></i>Customer</span><span class="what">Orders materials, books crew, tracks delivery, runs the site record.</span></div>
+      <div class="role"><span class="n">02</span><span class="who" style="--role:#F59E0B"><i></i>Worker</span><span class="what">Sees jobs nearby, accepts, checks in at the site boundary, gets paid against recorded hours.</span></div>
+      <div class="role"><span class="n">03</span><span class="who" style="--role:#8B5CF6"><i></i>Contractor</span><span class="what">Runs multiple sites and gangs, orders on account, tracks spend per project.</span></div>
+      <div class="role"><span class="n">04</span><span class="who" style="--role:#10B981"><i></i>Store manager</span><span class="what">Runs one dark store: accept, pick, pack, dispatch, cycle count, low stock.</span></div>
+      <div class="role"><span class="n">05</span><span class="who" style="--role:#EF4444"><i></i>Rider</span><span class="what">Goes online, takes dispatched jobs for their store's city, reports position, closes the run.</span></div>
+      <div class="role"><span class="n">06</span><span class="who" style="--role:#6366F1"><i></i>Ops &amp; admin</span><span class="what">Watches late-against-promised, verifications, disputes, returns and the ledger.</span></div>
+    </div>
+  </section>
+
+  <!-- ── FLOW ─────────────────────────────────────────────── -->
+  <section id="flow" data-shape="3" data-sheet="A-05" data-model="Dispatch">
+    <div class="col">
+      <p class="eyebrow">Order flow <span class="dim">/ pincode to doorstep</span></p>
+      <h2>How an order actually runs.</h2>
+
+      <div class="flow">
+        <div class="step">
+          <span class="no">Step 01</span>
+          <h3>Pincode check</h3>
+          <p>We tell you straight away whether your site is inside a serviced zone. If it isn't, we say so instead of taking the order.</p>
+        </div>
+        <div class="step">
+          <span class="no">Step 02</span>
+          <h3>Cart, no minimum</h3>
+          <p>One bag or one truckload. No minimum order value beyond the SKU's own minimum quantity.</p>
+        </div>
+        <div class="step">
+          <span class="no">Step 03</span>
+          <h3>Pick your window</h3>
+          <p>ASAP in 60–120 minutes, a scheduled two-hour slot, or next day.</p>
+          <span class="meta">Open 08:00–20:00 IST, every day</span>
+        </div>
+        <div class="step">
+          <span class="no">Step 04</span>
+          <h3>Nearest store picks it</h3>
+          <p>The order is assigned to the closest in-zone dark store that actually holds the stock, and turns into a pick list on the floor.</p>
+          <span class="meta">Free cancel within 10 minutes</span>
+        </div>
+        <div class="step">
+          <span class="no">Step 05</span>
+          <h3>Dispatch and clock</h3>
+          <p>A rider takes it, the SLA clock runs against the promised window, and the order carries the rider's last reported position.</p>
+        </div>
+        <div class="step">
+          <span class="no">Step 06</span>
+          <h3>Delivered — and reversible</h3>
+          <p>Unused goods in original packing can be returned or exchanged within 24 hours. Cut and mixed goods can't, and we tell you which is which before you buy.</p>
+        </div>
+      </div>
+
+      <div class="tablewrap">
+        <table>
+          <caption class="sr-only" style="position:absolute;left:-9999px;">Planned delivery fee by order value</caption>
+          <thead><tr><th scope="col">Order value</th><th scope="col">Delivery fee</th><th scope="col">Note</th></tr></thead>
+          <tbody>
+            <tr><td>₹10,000 and above</td><td class="amt">Free</td><td>Standard in-zone delivery</td></tr>
+            <tr><td>₹5,000 – ₹9,999</td><td class="amt">₹99</td><td>Standard in-zone delivery</td></tr>
+            <tr><td>Under ₹5,000</td><td class="amt">₹199</td><td>Standard in-zone delivery</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">Fee structure planned for launch. Final rates confirm when the first zone opens.</p>
+    </div>
+  </section>
+
+  <!-- ── ZONES ────────────────────────────────────────────── -->
+  <section id="zones" data-shape="4" data-sheet="A-06" data-model="Network">
+    <div class="col">
+      <p class="eyebrow">Coverage <span class="dim">/ four zones, four stores</span></p>
+      <h2>We are not launching in all of Hyderabad.</h2>
+      <p class="lead">
+        Four zones, deliberately far apart, each with its own dark store. Far apart because a 60–120
+        minute promise is only real if the stock is already near you — and we would rather cover four
+        zones honestly than the whole city badly.
+      </p>
+    </div>
+
+    <div class="zones">
+      <div class="zone"><span class="pin">500032</span><h3>Gachibowli</h3><span class="store">Financial District · Store A</span><p class="sla">60–120 min · 08:00–20:00</p></div>
+      <div class="zone"><span class="pin">500003</span><h3>Secunderabad</h3><span class="store">Store B</span><p class="sla">60–120 min · 08:00–20:00</p></div>
+      <div class="zone"><span class="pin">500039</span><h3>Uppal</h3><span class="store">Store C</span><p class="sla">60–120 min · 08:00–20:00</p></div>
+      <div class="zone"><span class="pin">500074</span><h3>LB Nagar</h3><span class="store">Store D</span><p class="sla">60–120 min · 08:00–20:00</p></div>
+    </div>
+    <p class="note">Outside these zones we are not live, and the app will tell you so rather than take an order it can't keep.</p>
+  </section>
+
+  <!-- ── HONESTY ──────────────────────────────────────────── -->
+  <section id="honest" data-shape="6" data-sheet="A-07" data-model="Ledger">
+    <div class="col">
+      <p class="eyebrow">Straight answers <span class="dim">/ before you ask</span></p>
+      <h2>What we promise, and what we don't.</h2>
+      <p class="lead">
+        Construction is full of people promising things they can't deliver. We would rather lose the
+        sign-up than earn it on a claim we can't keep.
+      </p>
+    </div>
+
+    <div class="board">
+      <div class="panel yes">
+        <h3>What we will do</h3>
+        <ul>
+          <li><span class="mk"></span><span><b>60–120 minutes</b> in the four listed zones, during opening hours.</span></li>
+          <li><span class="mk"></span><span><b>Our stock, our stores.</b> Branded goods we hold ourselves.</span></li>
+          <li><span class="mk"></span><span><b>A promised window on every order</b>, and a clock you can watch against it.</span></li>
+          <li><span class="mk"></span><span><b>24-hour returns</b> on unused goods in original packing.</span></li>
+          <li><span class="mk"></span><span><b>Free cancellation</b> for 10 minutes after you place the order.</span></li>
+          <li><span class="mk"></span><span><b>Every rupee on a ledger line</b> you can trace.</span></li>
+        </ul>
+      </div>
+      <div class="panel no">
+        <h3>What we will not claim</h3>
+        <ul>
+          <li><span class="mk"></span><span><b>Not 10-minute delivery.</b> Cement is not groceries.</span></li>
+          <li><span class="mk"></span><span><b>Not all of Hyderabad.</b> Four zones at launch, and we'll name them every time.</span></li>
+          <li><span class="mk"></span><span><b>Not second-by-second tracking.</b> You see the rider's last reported position, not a live trace.</span></li>
+          <li><span class="mk"></span><span><b>Not escrow.</b> Payment is settled on delivery at launch; anything else would be a story.</span></li>
+          <li><span class="mk"></span><span><b>Not a marketplace.</b> You are not bidding across shops — you are buying from us.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ──────────────────────────────────────────────── -->
+  <section id="cta" data-shape="7" data-sheet="A-08" data-model="Hyderabad">
+    <div class="col">
+      <p class="eyebrow">Coming soon <span class="dim">/ Hyderabad first</span></p>
+      <h2>The first four zones open soon.</h2>
+      <p class="lead">
+        Building a house, running a site, or supplying one — tell us your pincode and we'll come to you
+        first when your zone opens.
+      </p>
+      <div class="hero-cta">
+        <a class="pill" id="early" href="#"><span class="tick"></span>Get early access</a>
+        <a class="pill ghost" href="#zones">Check your zone</a>
+      </div>
+      <p class="note">
+        No launch date is being promised here. When a zone opens, it opens with stock on the shelf and a
+        rider on the road — not before.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <span>Cornerstone · Hyderabad · ₹ · IST</span>
+  <span class="rule">
+    <span>Materials + labour</span>
+    <span>60–120 min in listed zones</span>
+    <span>08:00–20:00 daily</span>
+  </span>
+</footer>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+/* ═══════════════════════════════════════════════════════════
+   Contact — replace with the real inbox before going public.
+   ═══════════════════════════════════════════════════════════ */
+var CONTACT = 'hello@cornerstone.co.in';
+
+var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ── early access mail link ──────────────────────────────── */
+var early = document.getElementById('early');
+if (early) {
+  early.href = 'mailto:' + CONTACT
+    + '?subject=' + encodeURIComponent('Cornerstone early access')
+    + '&body=' + encodeURIComponent('Pincode:\nWhat I am building:\nName:\n');
+}
+
+/* ── masthead state ──────────────────────────────────────── */
+var mast = document.getElementById('mast');
+function onScrollMast(){ mast.dataset.stuck = window.scrollY > 24 ? '1' : '0'; }
+onScrollMast();
+addEventListener('scroll', onScrollMast, {passive:true});
+
+/* ── reveal on scroll ────────────────────────────────────── */
+var revealTargets = document.querySelectorAll('.rv, .card, .zone, .step, .role, .panel, .tablewrap');
+if ('IntersectionObserver' in window && !reduce) {
+  Array.prototype.forEach.call(revealTargets, function(el, i){
+    if (!el.classList.contains('rv')) el.classList.add('rv');
+    el.style.transitionDelay = (Math.min(i % 8, 7) * 55) + 'ms';
+  });
+  var revealer = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting) { e.target.classList.add('in'); revealer.unobserve(e.target); }
+    });
+  }, {rootMargin:'0px 0px -12% 0px', threshold:0.08});
+  Array.prototype.forEach.call(revealTargets, function(el){ revealer.observe(el); });
+} else {
+  Array.prototype.forEach.call(revealTargets, function(el){ el.classList.add('in'); });
+}
+
+/* ── HUD + section → model binding ───────────────────────── */
+var sections = Array.prototype.slice.call(document.querySelectorAll('section[data-shape]'));
+var hudSheet = document.getElementById('hud-sheet');
+var hudModel = document.getElementById('hud-model');
+var hudPct   = document.getElementById('hud-pct');
+var hudBar   = document.getElementById('hud-bar');
+var setShape = function(){};                 // replaced once GL boots
+
+function activate(sec){
+  hudSheet.textContent = sec.dataset.sheet;
+  hudModel.textContent = sec.dataset.model;
+  setShape(parseInt(sec.dataset.shape, 10));
+}
+
+if ('IntersectionObserver' in window) {
+  var current = null;
+  var secObs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting && e.target !== current) { current = e.target; activate(e.target); }
+    });
+  }, {rootMargin:'-45% 0px -45% 0px', threshold:0});
+  sections.forEach(function(s){ secObs.observe(s); });
+}
+
+var scrollPct = 0;
+function onScrollHud(){
+  var h = document.documentElement;
+  var max = h.scrollHeight - innerHeight;
+  scrollPct = max > 0 ? Math.min(1, Math.max(0, scrollY / max)) : 0;
+  hudPct.textContent = (scrollPct * 100 < 10 ? '0' : '') + Math.round(scrollPct * 100) + '%';
+  hudBar.style.height = (scrollPct * 112) + 'px';
+}
+onScrollHud();
+addEventListener('scroll', onScrollHud, {passive:true});
+addEventListener('resize', onScrollHud);
+
+/* ═══════════════════════════════════════════════════════════
+   THE MODEL — raw WebGL2. A 45k-point cloud that re-assembles
+   into a different object for each sheet, over a blueprint
+   ground grid.
+   ═══════════════════════════════════════════════════════════ */
+var canvas = document.getElementById('gl');
+var gl = null;
+try {
+  gl = canvas.getContext('webgl2', {antialias:false, alpha:true, premultipliedAlpha:true, powerPreference:'high-performance'});
+} catch (e) { gl = null; }
+
+if (!gl) { document.body.dataset.gl = 'off'; return; }
+
+var isSmall = Math.min(innerWidth, innerHeight) < 720;
+var COUNT = isSmall ? 24000 : 45000;
+
+/* ── point-cloud generators ──────────────────────────────── */
+var R = (function(){                        // deterministic PRNG, stable across reloads
+  var s = 1103515245;
+  return function(){ s = (s * 1103515245 + 12345) & 0x7fffffff; return s / 0x7fffffff; };
+})();
+function rnd(a, b){ return a + (b - a) * R(); }
+function pick(n){ return Math.floor(R() * n); }
+
+function build(fn){
+  var a = new Float32Array(COUNT * 3), p = [0,0,0];
+  for (var i = 0; i < COUNT; i++) {
+    fn(p, i / COUNT, i);
+    a[i*3] = p[0]; a[i*3+1] = p[1]; a[i*3+2] = p[2];
+  }
+  return a;
+}
+function boxFill(p, cx, cy, cz, sx, sy, sz){
+  p[0] = cx + rnd(-sx, sx); p[1] = cy + rnd(-sy, sy); p[2] = cz + rnd(-sz, sz);
+}
+function boxShell(p, cx, cy, cz, sx, sy, sz){
+  var f = pick(6), u = rnd(-1,1), v = rnd(-1,1);
+  if (f === 0){ p[0]=cx+sx; p[1]=cy+u*sy; p[2]=cz+v*sz; }
+  else if (f === 1){ p[0]=cx-sx; p[1]=cy+u*sy; p[2]=cz+v*sz; }
+  else if (f === 2){ p[0]=cx+u*sx; p[1]=cy+sy; p[2]=cz+v*sz; }
+  else if (f === 3){ p[0]=cx+u*sx; p[1]=cy-sy; p[2]=cz+v*sz; }
+  else if (f === 4){ p[0]=cx+u*sx; p[1]=cy+v*sy; p[2]=cz+sz; }
+  else { p[0]=cx+u*sx; p[1]=cy+v*sy; p[2]=cz-sz; }
+}
+function ring(p, cx, cy, cz, r, axis, jitter){
+  var a = R() * Math.PI * 2, rr = r * (1 + rnd(-jitter, jitter));
+  if (axis === 'y'){ p[0]=cx+Math.cos(a)*rr; p[1]=cy+rnd(-jitter,jitter); p[2]=cz+Math.sin(a)*rr; }
+  else { p[0]=cx+rnd(-jitter,jitter); p[1]=cy+Math.sin(a)*rr; p[2]=cz+Math.cos(a)*rr; }
+}
+
+/* 0 — the cornerstone: an edge-heavy cube */
+var S_CUBE = build(function(p){
+  var r = R();
+  if (r < 0.60) {                                     // the twelve edges carry the form
+    var axis = pick(3), s = 1.0, e = 0.028;
+    var a = rnd(-s, s), b = (R()<0.5?-s:s), c = (R()<0.5?-s:s);
+    if (axis === 0){ p[0]=a; p[1]=b+rnd(-e,e); p[2]=c+rnd(-e,e); }
+    else if (axis === 1){ p[1]=a; p[0]=b+rnd(-e,e); p[2]=c+rnd(-e,e); }
+    else { p[2]=a; p[0]=b+rnd(-e,e); p[1]=c+rnd(-e,e); }
+  } else if (r < 0.84) {                              // face haze
+    boxShell(p, 0,0,0, 1,1,1);
+  } else {                                            // inner lattice, on a 4-step grid
+    var q = function(){ return (pick(5)/4)*2-1; };
+    p[0]=q(); p[1]=rnd(-1,1); p[2]=q();
+  }
+});
+
+/* 1 — structure: slabs, columns, a crane */
+var S_TOWER = build(function(p){
+  var r = R();
+  if (r < 0.50) {                                     // floor slabs
+    var f = pick(7), y = -1.05 + f * 0.30;
+    boxFill(p, 0, y, 0, 0.62, 0.018, 0.62);
+  } else if (r < 0.78) {                              // corner columns
+    p[0] = (R()<0.5?-0.56:0.56) + rnd(-0.035,0.035);
+    p[1] = rnd(-1.1, 0.85);
+    p[2] = (R()<0.5?-0.56:0.56) + rnd(-0.035,0.035);
+  } else if (r < 0.90) {                              // crane mast
+    p[0] = 0.95 + rnd(-0.03,0.03);
+    p[1] = rnd(-1.1, 1.35);
+    p[2] = -0.2 + rnd(-0.03,0.03);
+  } else if (r < 0.96) {                              // crane jib
+    p[0] = 0.95 - R() * 1.55;
+    p[1] = 1.3 + rnd(-0.02,0.02);
+    p[2] = -0.2 + rnd(-0.03,0.03);
+  } else {                                            // hoist cable + load
+    var t = R();
+    p[0] = 0.30 + rnd(-0.012,0.012);
+    p[1] = t < 0.75 ? rnd(0.42, 1.30) : 0.40 + rnd(-0.09,0.09);
+    p[2] = -0.2 + (t < 0.75 ? rnd(-0.012,0.012) : rnd(-0.09,0.09));
+  }
+});
+
+/* 2 — the dark store: shell plus shelf racks */
+var S_STORE = build(function(p){
+  var r = R();
+  if (r < 0.34) {                                     // building shell
+    boxShell(p, 0, -0.1, 0, 1.15, 0.62, 0.78);
+  } else if (r < 0.86) {                              // racks in rows
+    var row = pick(4), bay = pick(6), lvl = pick(3);
+    boxFill(p,
+      -0.88 + bay * 0.352,
+      -0.62 + lvl * 0.34,
+      -0.5 + row * 0.335,
+      0.115, 0.055, 0.075);
+  } else {                                            // dock apron
+    p[0] = rnd(-1.15, 1.15); p[1] = -0.72 + rnd(-0.01,0.01); p[2] = rnd(0.78, 1.25);
+  }
+});
+
+/* 3 — dispatch: the truck */
+var S_TRUCK = build(function(p){
+  var r = R();
+  if (r < 0.42)      boxShell(p, 0.25, 0.12, 0, 0.72, 0.42, 0.42);   // cargo box
+  else if (r < 0.62) boxShell(p, -0.72, -0.02, 0, 0.30, 0.28, 0.38); // cab
+  else if (r < 0.70) boxFill(p, -0.25, -0.34, 0, 1.0, 0.03, 0.40);   // chassis
+  else if (r < 0.92) {                                               // wheels
+    var wx = (R()<0.5 ? -0.68 : 0.55), wz = (R()<0.5 ? -0.42 : 0.42);
+    ring(p, wx, -0.46, wz, 0.20, 'z', 0.045);
+  } else {                                                           // load on the bed
+    boxFill(p, 0.25, 0.58, 0, 0.55, 0.06, 0.3);
+  }
+});
+
+/* 4 — the network: four zones around a hub, with arcs */
+var S_NET = build(function(p){
+  var nodes = [[-1.05,-0.35,-0.75],[1.0,-0.35,-0.6],[0.95,-0.35,0.85],[-0.85,-0.35,0.9]];
+  var hub = [0,0.55,0];
+  var r = R();
+  if (r < 0.30) {                                     // zone clusters
+    var n = nodes[pick(4)], a = R()*Math.PI*2, rr = Math.pow(R(),0.6)*0.30;
+    p[0]=n[0]+Math.cos(a)*rr; p[1]=n[1]+rnd(-0.02,0.06); p[2]=n[2]+Math.sin(a)*rr;
+  } else if (r < 0.44) {                              // hub
+    var b = R()*Math.PI*2, rb = Math.pow(R(),0.5)*0.22;
+    p[0]=Math.cos(b)*rb; p[1]=hub[1]+rnd(-0.16,0.16); p[2]=Math.sin(b)*rb;
+  } else if (r < 0.86) {                              // arcs hub → zone
+    var nd = nodes[pick(4)], t = R(), it = 1-t;
+    var mx = (hub[0]+nd[0])/2, my = hub[1]+0.55, mz = (hub[2]+nd[2])/2;
+    p[0] = it*it*hub[0] + 2*it*t*mx + t*t*nd[0] + rnd(-0.012,0.012);
+    p[1] = it*it*hub[1] + 2*it*t*my + t*t*nd[1] + rnd(-0.012,0.012);
+    p[2] = it*it*hub[2] + 2*it*t*mz + t*t*nd[2] + rnd(-0.012,0.012);
+  } else {                                            // ground ring
+    ring(p, 0, -0.42, 0, 1.45, 'y', 0.02);
+  }
+});
+
+/* 5 — crew: the hard hat */
+var S_HAT = build(function(p){
+  var r = R();
+  if (r < 0.60) {                                     // dome
+    var u = R()*Math.PI*2, v = Math.acos(R());        // upper hemisphere
+    var rad = 0.72 * (1 + rnd(-0.012, 0.012));
+    p[0]=Math.sin(v)*Math.cos(u)*rad;
+    p[1]=Math.cos(v)*rad - 0.16;
+    p[2]=Math.sin(v)*Math.sin(u)*rad*0.92;
+  } else if (r < 0.86) {                              // brim
+    var a2 = R()*Math.PI*2, rr2 = 0.72 + Math.pow(R(),0.7)*0.42;
+    p[0]=Math.cos(a2)*rr2;
+    p[1]=-0.20 + rnd(-0.018,0.018) - rr2*0.06;
+    p[2]=Math.sin(a2)*rr2*(a2>Math.PI?1.12:0.92);
+  } else {                                            // centre ridge
+    var t2 = rnd(-1,1);
+    p[0]=t2*0.03; p[1]=Math.cos(t2*1.35)*0.70 - 0.16; p[2]=Math.sin(t2*1.35)*0.70;
+  }
+});
+
+/* 6 — the ledger: stacked balanced lines */
+var S_LEDGER = build(function(p){
+  var r = R();
+  if (r < 0.72) {                                     // ruled lines, two columns
+    var line = pick(11), y = 0.78 - line * 0.145;
+    var side = R() < 0.5 ? -1 : 1;
+    var len = 0.22 + R() * 0.62;
+    p[0] = side * (0.10 + R() * len);
+    p[1] = y + rnd(-0.006, 0.006);
+    p[2] = rnd(-0.30, 0.30) * 0.12;
+  } else if (r < 0.86) {                              // the centre rule — the balance
+    p[0] = rnd(-0.008, 0.008); p[1] = rnd(-0.92, 0.92); p[2] = rnd(-0.04, 0.04);
+  } else {                                            // sheet border
+    var e = pick(4);
+    if (e < 2) { p[0] = rnd(-1.05,1.05); p[1] = (e?1:-1)*0.95; }
+    else { p[1] = rnd(-0.95,0.95); p[0] = (e===2?-1:1)*1.05; }
+    p[2] = rnd(-0.02,0.02);
+  }
+});
+
+/* 7 — the city: an extruded block grid */
+var S_CITY = build(function(p){
+  var gx = pick(11) - 5, gz = pick(11) - 5;
+  var d = Math.sqrt(gx*gx + gz*gz);
+  var h = 0.10 + Math.max(0, (5.4 - d)) * rnd(0.04, 0.15);
+  var r = R();
+  if (r < 0.82) {
+    p[0] = gx*0.21 + rnd(-0.062,0.062);
+    p[1] = -0.75 + R()*h;
+    p[2] = gz*0.21 + rnd(-0.062,0.062);
+  } else {                                            // street plane
+    p[0] = rnd(-1.2,1.2); p[1] = -0.76 + rnd(-0.004,0.004); p[2] = rnd(-1.2,1.2);
+  }
+});
+
+var SHAPES = [S_CUBE, S_TOWER, S_STORE, S_TRUCK, S_NET, S_HAT, S_LEDGER, S_CITY];
+
+/* scatter: where the model flies in from on first paint */
+var SCATTER = build(function(p){
+  var u = R()*Math.PI*2, v = Math.acos(2*R()-1), rad = 2.4 + R()*2.6;
+  p[0]=Math.sin(v)*Math.cos(u)*rad; p[1]=Math.cos(v)*rad*0.6; p[2]=Math.sin(v)*Math.sin(u)*rad;
+});
+
+/* ── shaders ─────────────────────────────────────────────── */
+var VS = [
+'#version 300 es',
+'precision highp float;',
+'in vec3 aFrom; in vec3 aTo; in vec3 aSeed;',
+'uniform mat4 uProj; uniform mat4 uView;',
+'uniform float uMix; uniform float uTime; uniform float uSize; uniform float uDpr; uniform float uShift;',
+'out float vGlow; out float vDepth; out float vTone;',
+'vec3 swirl(vec3 p){',
+'  return vec3(sin(p.y*1.7+p.z*1.1), sin(p.z*1.3+p.x*1.9), sin(p.x*1.5+p.y*0.9));',
+'}',
+'void main(){',
+'  float d = clamp((uMix - aSeed.x*0.28) / 0.72, 0.0, 1.0);',
+'  float e = d*d*(3.0-2.0*d);',
+'  vec3 p = mix(aFrom, aTo, e);',
+'  float burst = sin(e*3.14159265);',
+'  p += swirl(p*1.6 + uTime*0.22 + aSeed*6.2831) * burst * 0.30;',
+'  p += swirl(p*2.4 + uTime*0.30) * 0.013;',
+'  vec4 mv = uView * vec4(p, 1.0);',
+'  gl_Position = uProj * mv;',
+'  gl_Position.x += uShift * gl_Position.w;',
+'  float dist = max(-mv.z, 0.05);',
+'  gl_PointSize = clamp(uSize * (3.0/dist) * (0.45 + aSeed.y*0.95), 1.0, 7.0*uDpr);',
+'  vDepth = clamp((dist - 2.2) / 5.2, 0.0, 1.0);',
+'  vGlow = burst;',
+'  vTone = aSeed.z;',
+'}'
+].join('\n');
+
+var FS = [
+'#version 300 es',
+'precision highp float;',
+'in float vGlow; in float vDepth; in float vTone;',
+'out vec4 frag;',
+'const vec3 SAFETY = vec3(1.0, 0.690, 0.0);',
+'const vec3 CHALK  = vec3(0.914, 0.902, 0.871);',
+'const vec3 OXIDE  = vec3(0.761, 0.255, 0.047);',
+'void main(){',
+'  vec2 c = gl_PointCoord * 2.0 - 1.0;',
+'  float r2 = dot(c, c);',
+'  if (r2 > 1.0) discard;',
+'  float a = exp(-r2 * 3.1);',
+'  vec3 col = mix(SAFETY, CHALK, smoothstep(0.05, 0.80, vDepth));',
+'  col = mix(col, OXIDE, step(0.94, vTone) * 0.75);',
+'  col = mix(col, vec3(1.0, 0.96, 0.88), vGlow * 0.45);',
+'  a *= mix(0.72, 0.17, vDepth);',
+'  frag = vec4(col * a, a);',   // premultiplied — additive glow that composites over the sheet
+'}'
+].join('\n');
+
+var GVS = [
+'#version 300 es',
+'precision highp float;',
+'in vec3 aPos;',
+'uniform mat4 uProj; uniform mat4 uView; uniform float uShift;',
+'out vec3 vWorld;',
+'void main(){',
+'  vWorld = aPos;',                       // fade is per-fragment: both ends of every line sit at the far edge
+'  gl_Position = uProj * uView * vec4(aPos, 1.0);',
+'  gl_Position.x += uShift * gl_Position.w;',
+'}'
+].join('\n');
+
+var GFS = [
+'#version 300 es',
+'precision highp float;',
+'in vec3 vWorld;',
+'out vec4 frag;',
+'void main(){',
+'  float fade = 1.0 - clamp(length(vWorld.xz) / 5.0, 0.0, 1.0);',
+'  float a = fade * fade * 0.85;',
+'  frag = vec4(vec3(0.40, 0.60, 0.90) * a, a);',
+'}'
+].join('\n');
+
+function shader(type, src){
+  var s = gl.createShader(type);
+  gl.shaderSource(s, src); gl.compileShader(s);
+  if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) { console.warn(gl.getShaderInfoLog(s)); return null; }
+  return s;
+}
+function program(vs, fs){
+  var v = shader(gl.VERTEX_SHADER, vs), f = shader(gl.FRAGMENT_SHADER, fs);
+  if (!v || !f) return null;
+  var p = gl.createProgram();
+  gl.attachShader(p, v); gl.attachShader(p, f); gl.linkProgram(p);
+  if (!gl.getProgramParameter(p, gl.LINK_STATUS)) { console.warn(gl.getProgramInfoLog(p)); return null; }
+  return p;
+}
+
+var progPts = program(VS, FS);
+var progGrid = program(GVS, GFS);
+if (!progPts || !progGrid) { document.body.dataset.gl = 'off'; return; }
+
+/* ── buffers ─────────────────────────────────────────────── */
+var seeds = new Float32Array(COUNT * 3);
+for (var i = 0; i < COUNT; i++) {
+  seeds[i*3] = Math.random(); seeds[i*3+1] = Math.random(); seeds[i*3+2] = Math.random();
+}
+
+function mkBuf(data, usage){
+  var b = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, b);
+  gl.bufferData(gl.ARRAY_BUFFER, data, usage || gl.STATIC_DRAW);
+  return b;
+}
+var bufFrom = mkBuf(SCATTER, gl.DYNAMIC_DRAW);
+var bufTo   = mkBuf(SHAPES[0], gl.DYNAMIC_DRAW);
+var bufSeed = mkBuf(seeds);
+
+var vaoPts = gl.createVertexArray();
+gl.bindVertexArray(vaoPts);
+[[bufFrom,'aFrom'],[bufTo,'aTo'],[bufSeed,'aSeed']].forEach(function(pair){
+  var loc = gl.getAttribLocation(progPts, pair[1]);
+  gl.bindBuffer(gl.ARRAY_BUFFER, pair[0]);
+  gl.enableVertexAttribArray(loc);
+  gl.vertexAttribPointer(loc, 3, gl.FLOAT, false, 0, 0);
+});
+gl.bindVertexArray(null);
+
+/* blueprint ground grid */
+var gridVerts = (function(){
+  var lines = [], N = 11, step = 0.47, ext = N * step, y = -1.18;
+  for (var i = -N; i <= N; i++) {
+    lines.push(i*step, y, -ext, i*step, y, ext);
+    lines.push(-ext, y, i*step, ext, y, i*step);
+  }
+  return new Float32Array(lines);
+})();
+var bufGrid = mkBuf(gridVerts);
+var vaoGrid = gl.createVertexArray();
+gl.bindVertexArray(vaoGrid);
+var gLoc = gl.getAttribLocation(progGrid, 'aPos');
+gl.bindBuffer(gl.ARRAY_BUFFER, bufGrid);
+gl.enableVertexAttribArray(gLoc);
+gl.vertexAttribPointer(gLoc, 3, gl.FLOAT, false, 0, 0);
+gl.bindVertexArray(null);
+
+var U = {
+  proj: gl.getUniformLocation(progPts, 'uProj'),
+  view: gl.getUniformLocation(progPts, 'uView'),
+  mix:  gl.getUniformLocation(progPts, 'uMix'),
+  time: gl.getUniformLocation(progPts, 'uTime'),
+  size: gl.getUniformLocation(progPts, 'uSize'),
+  dpr:  gl.getUniformLocation(progPts, 'uDpr'),
+  shift:gl.getUniformLocation(progPts, 'uShift')
+};
+var GU = {
+  proj: gl.getUniformLocation(progGrid, 'uProj'),
+  view: gl.getUniformLocation(progGrid, 'uView'),
+  shift:gl.getUniformLocation(progGrid, 'uShift')
+};
+
+/* ── matrices ────────────────────────────────────────────── */
+function perspective(fovy, aspect, near, far){
+  var f = 1 / Math.tan(fovy / 2), nf = 1 / (near - far);
+  return new Float32Array([
+    f/aspect,0,0,0,
+    0,f,0,0,
+    0,0,(far+near)*nf,-1,
+    0,0,2*far*near*nf,0
+  ]);
+}
+function lookAt(ex,ey,ez, cx,cy,cz){
+  var zx=ex-cx, zy=ey-cy, zz=ez-cz;
+  var zl=Math.hypot(zx,zy,zz)||1; zx/=zl; zy/=zl; zz/=zl;
+  var ux=0, uy=1, uz=0;
+  var xx=uy*zz-uz*zy, xy=uz*zx-ux*zz, xz=ux*zy-uy*zx;
+  var xl=Math.hypot(xx,xy,xz)||1; xx/=xl; xy/=xl; xz/=xl;
+  var yx=zy*xz-zz*xy, yy=zz*xx-zx*xz, yz=zx*xy-zy*xx;
+  return new Float32Array([
+    xx,yx,zx,0,
+    xy,yy,zy,0,
+    xz,yz,zz,0,
+    -(xx*ex+xy*ey+xz*ez), -(yx*ex+yy*ey+yz*ez), -(zx*ex+zy*ey+zz*ez), 1
+  ]);
+}
+
+/* ── transitions ─────────────────────────────────────────── */
+var shapeIndex = 0, queued = null, mixv = 0, morphing = true;
+var morphStart = 0, MORPH_MS = reduce ? 1 : 1500;
+
+setShape = function(next){
+  if (next === shapeIndex || next == null || !SHAPES[next]) return;
+  if (morphing) { queued = next; return; }
+  gl.bindBuffer(gl.ARRAY_BUFFER, bufFrom);
+  gl.bufferSubData(gl.ARRAY_BUFFER, 0, SHAPES[shapeIndex]);
+  gl.bindBuffer(gl.ARRAY_BUFFER, bufTo);
+  gl.bufferSubData(gl.ARRAY_BUFFER, 0, SHAPES[next]);
+  shapeIndex = next; mixv = 0; morphing = true; morphStart = performance.now();
+};
+
+/* ── pointer parallax ────────────────────────────────────── */
+var mx = 0, my = 0, tmx = 0, tmy = 0;
+if (!isSmall && !reduce) {
+  addEventListener('pointermove', function(e){
+    tmx = (e.clientX / innerWidth) * 2 - 1;
+    tmy = (e.clientY / innerHeight) * 2 - 1;
+  }, {passive:true});
+}
+
+/* ── resize ──────────────────────────────────────────────── */
+var dpr = 1, W = 1, H = 1, shift = 0;
+function resize(){
+  dpr = Math.min(devicePixelRatio || 1, 2);
+  // the text column owns the left of the sheet — push the model into the clear right side
+  shift = innerWidth >= 1000 ? 0.30 : 0;
+  W = Math.max(1, Math.floor(innerWidth * dpr));
+  H = Math.max(1, Math.floor(innerHeight * dpr));
+  if (canvas.width !== W || canvas.height !== H) { canvas.width = W; canvas.height = H; }
+  gl.viewport(0, 0, W, H);
+}
+resize();
+addEventListener('resize', resize);
+
+/* ── frame ───────────────────────────────────────────────── */
+gl.disable(gl.DEPTH_TEST);
+gl.enable(gl.BLEND);
+gl.blendFunc(gl.ONE, gl.ONE);            // additive on premultiplied output — a lit model on a dark sheet
+
+var t0 = performance.now();
+morphStart = t0;
+
+function frame(now){
+  var t = (now - t0) / 1000;
+
+  if (morphing) {
+    var k = Math.min(1, (now - morphStart) / MORPH_MS);
+    mixv = k;
+    if (k >= 1) {
+      morphing = false;
+      if (queued !== null) { var q = queued; queued = null; setShape(q); }
+    }
+  }
+
+  mx += (tmx - mx) * 0.045;
+  my += (tmy - my) * 0.045;
+
+  var spin = reduce ? 0.6 : (t * 0.085);
+  var ang  = spin + mx * 0.42 + scrollPct * 1.25;
+  var elev = 0.34 + my * 0.24 - scrollPct * 0.16;
+  var rad  = 4.35 - Math.sin(scrollPct * Math.PI) * 0.55;
+
+  var ex = Math.sin(ang) * Math.cos(elev) * rad;
+  var ey = Math.sin(elev) * rad + 0.15;
+  var ez = Math.cos(ang) * Math.cos(elev) * rad;
+
+  var proj = perspective(50 * Math.PI / 180, W / H, 0.1, 60);
+  var view = lookAt(ex, ey, ez, 0, -0.05, 0);
+
+  gl.clearColor(0, 0, 0, 0);
+  gl.clear(gl.COLOR_BUFFER_BIT);
+
+  gl.useProgram(progGrid);
+  gl.uniformMatrix4fv(GU.proj, false, proj);
+  gl.uniformMatrix4fv(GU.view, false, view);
+  gl.uniform1f(GU.shift, shift);
+  gl.bindVertexArray(vaoGrid);
+  gl.drawArrays(gl.LINES, 0, gridVerts.length / 3);
+
+  gl.useProgram(progPts);
+  gl.uniformMatrix4fv(U.proj, false, proj);
+  gl.uniformMatrix4fv(U.view, false, view);
+  gl.uniform1f(U.mix, mixv);
+  gl.uniform1f(U.time, reduce ? 0 : t);
+  gl.uniform1f(U.size, 3.1 * dpr);
+  gl.uniform1f(U.dpr, dpr);
+  gl.uniform1f(U.shift, shift);
+  gl.bindVertexArray(vaoPts);
+  gl.drawArrays(gl.POINTS, 0, COUNT);
+
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+/* the hero sheet owns the model until the reader scrolls */
+if (sections.length) activate(sections[0]);
+
+})();
+</script>
+</body>
+</html>
