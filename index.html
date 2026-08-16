@@ -382,14 +382,29 @@ tr:last-child td{border-bottom:0;}
 #cta{text-align:left;}
 #cta h2{max-width:16ch;}
 .note{
-  font:500 12px/1.6 var(--mono);letter-spacing:.08em;color:var(--dust-dim);
-  max-width:60ch;margin-top:26px;
+  font:500 12px/1.7 var(--mono);letter-spacing:.08em;color:var(--dust-dim);
+  max-width:66ch;margin-top:26px;
 }
+.note a{color:var(--dust);text-decoration:underline;text-underline-offset:3px;}
+.note a:hover{color:var(--safety);}
 footer{
   position:relative;z-index:2;border-top:1px solid var(--hair);
-  padding:34px var(--pad);max-width:1320px;margin-inline:auto;
-  display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:center;
+  padding:34px var(--pad) 46px;max-width:1320px;margin-inline:auto;
   font:500 11px/1.6 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--dust-dim);
+}
+footer .legal-nav{
+  display:flex;flex-wrap:wrap;gap:10px 22px;margin:0 0 26px;padding:0 0 24px;
+  list-style:none;border-bottom:1px solid var(--hair);
+}
+footer .legal-nav a{
+  font:500 11px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;
+  color:var(--dust);text-decoration:none;
+  border-bottom:1px solid transparent;padding-bottom:3px;
+  transition:color .2s ease,border-color .2s ease;
+}
+footer .legal-nav a:hover{color:var(--safety);border-bottom-color:var(--safety);}
+footer .base{
+  display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:center;
 }
 footer .rule{display:flex;gap:18px;flex-wrap:wrap;}
 
@@ -659,7 +674,12 @@ body[data-gl="off"] #world::after{
           </tbody>
         </table>
       </div>
-      <p class="note">Fee structure planned for launch. Final rates confirm when the first zone opens.</p>
+      <p class="note">
+        All prices in ₹, inclusive of GST where it applies, with no charge added after checkout.
+        Pay by UPI, card, net banking, wallet or on delivery. Full detail in
+        <a href="pricing.html">Pricing</a>, <a href="shipping.html">Shipping&nbsp;&amp;&nbsp;delivery</a>
+        and <a href="refunds.html">Cancellation&nbsp;&amp;&nbsp;refunds</a>.
+      </p>
     </div>
   </section>
 
@@ -704,6 +724,7 @@ body[data-gl="off"] #world::after{
           <li><span class="mk"></span><span><b>A promised window on every order</b>, and a clock you can watch against it.</span></li>
           <li><span class="mk"></span><span><b>24-hour returns</b> on unused goods in original packing.</span></li>
           <li><span class="mk"></span><span><b>Free cancellation</b> for 10 minutes after you place the order.</span></li>
+          <li><span class="mk"></span><span><b>Pay online or on delivery</b> — UPI, cards, net banking and wallets, handled by a PCI-DSS compliant gateway. We never see your card or PIN.</span></li>
           <li><span class="mk"></span><span><b>Every rupee on a ledger line</b> you can trace.</span></li>
         </ul>
       </div>
@@ -713,7 +734,7 @@ body[data-gl="off"] #world::after{
           <li><span class="mk"></span><span><b>Not 10-minute delivery.</b> Cement is not groceries.</span></li>
           <li><span class="mk"></span><span><b>Not all of Hyderabad.</b> Four zones at launch, and we'll name them every time.</span></li>
           <li><span class="mk"></span><span><b>Not second-by-second tracking.</b> You see the rider's last reported position, not a live trace.</span></li>
-          <li><span class="mk"></span><span><b>Not escrow.</b> Payment is settled on delivery at launch; anything else would be a story.</span></li>
+          <li><span class="mk"></span><span><b>Not escrow.</b> You pay us for your order. We hold nothing in trust between you and anybody else.</span></li>
           <li><span class="mk"></span><span><b>Not a marketplace.</b> You are not bidding across shops — you are buying from us.</span></li>
         </ul>
       </div>
@@ -743,12 +764,22 @@ body[data-gl="off"] #world::after{
 </main>
 
 <footer>
-  <span>Cornerstone · Hyderabad · ₹ · IST</span>
-  <span class="rule">
-    <span>Materials + labour</span>
-    <span>60–120 min in listed zones</span>
-    <span>08:00–20:00 daily</span>
-  </span>
+  <ul class="legal-nav">
+    <li><a href="contact.html">Contact us</a></li>
+    <li><a href="pricing.html">Pricing</a></li>
+    <li><a href="shipping.html">Shipping &amp; delivery</a></li>
+    <li><a href="refunds.html">Cancellation &amp; refunds</a></li>
+    <li><a href="terms.html">Terms &amp; conditions</a></li>
+    <li><a href="privacy.html">Privacy policy</a></li>
+  </ul>
+  <div class="base">
+    <span>Cornerstone · Hyderabad · ₹ · IST</span>
+    <span class="rule">
+      <span>Materials + labour</span>
+      <span>60–120 min in listed zones</span>
+      <span>08:00–20:00 daily</span>
+    </span>
+  </div>
 </footer>
 </div>
 
